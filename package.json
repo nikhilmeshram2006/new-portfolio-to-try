@@ -1,5 +1,5 @@
 {
-  "name": "kage-landing-page-app",
+  "name": "nikhil-meshram-portfolio",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@designcodeio/threeui": "file:./threeui.tgz",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "three": "^0.165.0"

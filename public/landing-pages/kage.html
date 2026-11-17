@@ -202,7 +202,7 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 }
 .peek-fr{ display:block; aspect-ratio:16/10;
   background:linear-gradient(180deg, rgba(3,6,9,.04) 24%, rgba(3,6,9,.48) 100%),
-    url('/projects/nikflix.png') center / cover no-repeat;
+    url('../projects/nikflix.png') center / cover no-repeat;
   outline:1px solid rgba(223,231,224,.16); outline-offset:-1px;
   box-shadow:0 34px 70px -30px rgba(0,0,0,.9); transition:outline-color .5s; }
 .peek:hover{ transform:translate3d(0,-5px,0); }
@@ -285,17 +285,17 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 .card:nth-child(1) .card-fr{
   background:
     linear-gradient(180deg,rgba(3,6,9,.04) 36%,rgba(3,6,9,.72) 100%),
-    url('/projects/nikflix.png') center / cover no-repeat;
+    url('../projects/nikflix.png') center / cover no-repeat;
 }
 .card:nth-child(2) .card-fr{
   background:
     linear-gradient(180deg,rgba(3,6,9,.06) 36%,rgba(3,6,9,.74) 100%),
-    url('/projects/apple-music-banner.png') center / cover no-repeat;
+    url('../projects/apple-music-banner.png') center / cover no-repeat;
 }
 .card:nth-child(3) .card-fr{
   background:
     linear-gradient(180deg,rgba(3,6,9,.05) 36%,rgba(3,6,9,.74) 100%),
-    url('/projects/f1-telemetry.png') center / cover no-repeat;
+    url('../projects/f1-telemetry.png') center / cover no-repeat;
 }
 .card-fr::after{ content:''; position:absolute; inset:0;
   background:linear-gradient(transparent 46%, rgba(4,6,9,.80)); pointer-events:none; }
@@ -365,7 +365,7 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 .no-webgl .peek-fr{ background:linear-gradient(160deg,#162326,#0b1013 55%,#241010); }
 .no-webgl .word-fb{
   display:block; position:absolute; left:0; right:0; bottom:16%; z-index:1;
-  font-family:'Wordmark','Onest',sans-serif; font-weight:600; font-size:21.4vw; line-height:.78;
+  font-family:'Onest',sans-serif; font-weight:700; font-size:21.4vw; line-height:.78;
   letter-spacing:.052em; text-align:center; pointer-events:none;
   background:linear-gradient(#e2ece5, #97a89c); -webkit-background-clip:text; background-clip:text;
   color:transparent;
@@ -882,23 +882,64 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
   .mask-line > span,.word{ opacity:1 !important; transform:none !important; }
 }
 
-/* --- Nikhil Portfolio 3-Card Grid & Pill Links --- */
+/* --- Nikhil Portfolio Layout Overrides: Hero Chips, 3-Card Grid & Pill Links --- */
+@media (min-width: 821px) {
+  body[data-layout-hero="b"] .hero-foot {
+    width: min(780px, calc(100% - clamp(190px, 20vw, 310px)));
+  }
+}
+body[data-layout-hero="b"] .chip {
+  gap: 6px;
+}
+body[data-layout-hero="b"] .chip .tx {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  clip-path: none;
+  white-space: normal;
+}
+
+body[data-layout-gallery="b"] .cards,
 .cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr) !important;
-  gap: clamp(10px, 1.4vw, 22px) !important;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+  gap: clamp(10px, 1.4vw, 22px);
   align-items: start;
 }
 @media (max-width: 900px) {
+  body[data-layout-gallery="b"] .cards,
   .cards {
-    grid-template-columns: 1fr !important;
-    gap: 16px !important;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 }
+body[data-layout-gallery="b"] .card:first-child {
+  grid-row: auto;
+}
+body[data-layout-gallery="b"] .card-fr,
+body[data-layout-gallery="b"] .card:first-child .card-fr,
+body[data-layout-gallery="b"] .card:not(:first-child) .card-fr,
 .card-fr {
-  aspect-ratio: 16/10 !important;
+  flex: 0 0 auto;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 16/10;
   border-radius: 6px;
   overflow: hidden;
+}
+.card-fr.on-cloth {
+  background: none !important;
+  overflow: visible !important;
+}
+.card-meta {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  text-transform: none;
+  letter-spacing: 0.01em;
 }
 .card-links {
   display: flex;
@@ -937,24 +978,24 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
   border-color: rgba(223, 231, 224, 0.3);
   color: var(--bone);
 }
-.card:nth-child(1) .card-fr {
+.card:nth-child(1) .card-fr:not(.on-cloth) {
   background: linear-gradient(180deg, rgba(3,6,9,.04) 36%, rgba(3,6,9,.72) 100%),
-              url('/projects/nikflix.png') center / cover no-repeat !important;
+              url('../projects/nikflix.png') center / cover no-repeat;
 }
-.card:nth-child(2) .card-fr {
+.card:nth-child(2) .card-fr:not(.on-cloth) {
   background: linear-gradient(180deg, rgba(3,6,9,.06) 36%, rgba(3,6,9,.74) 100%),
-              url('/projects/apple-music-banner.png') center / cover no-repeat !important;
+              url('../projects/apple-music-banner.png') center / cover no-repeat;
 }
-.card:nth-child(3) .card-fr {
+.card:nth-child(3) .card-fr:not(.on-cloth) {
   background: linear-gradient(180deg, rgba(3,6,9,.05) 36%, rgba(3,6,9,.74) 100%),
-              url('/projects/f1-telemetry.png') center / cover no-repeat !important;
+              url('../projects/f1-telemetry.png') center / cover no-repeat;
 }
 
 
 </style>
 </head>
 <body data-layout-hero="b" data-layout-story="b" data-layout-gallery="b"
-      data-layout-curriculum="b" data-layout-closing="b" data-layout-footer="b">
+      data-layout-curriculum="b" data-layout-footer="b">
 
 <canvas id="gl" aria-hidden="true"></canvas>
 <div id="vignette"></div>
@@ -1025,7 +1066,6 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
       <div class="chip" data-chip="3" data-rv="up" data-cursor><span class="num">04</span>
         <span class="tx"><b>3D &amp; Web</b><p>Interactive Three.js graphics, custom shaders &amp; modern web apps.</p></span></div>
     </div>
-  </div>
   </div>
 
   <a class="peek" href="#pathways" data-view="3" data-rv="fade" data-cursor aria-label="Preview: Featured project Nikflix">
@@ -3128,7 +3168,7 @@ function buildWordmark() {
      edge while the caps come back down to the height of the headline block. */
   const SZ = 260, TRACK = .24, PAD = 24;
   const m = cvs(4, 4).getContext('2d');
-  m.font = '600 ' + SZ + 'px Wordmark, sans-serif';
+  m.font = '700 ' + SZ + 'px Onest, sans-serif';
   m.textBaseline = 'alphabetic'; m.textAlign = 'left';
   const word = 'NIKHIL', gl = [];
   let pen = 0, ascMax = 0, descMax = 0, xMin = 1e9, xMax = -1e9;
@@ -3146,7 +3186,7 @@ function buildWordmark() {
   gl.forEach((g, i) => {
     const cw = Math.ceil(g.l + g.r) + PAD * 2, chh = Math.ceil(g.asc + g.desc) + PAD * 2;
     const c = cvs(cw, chh), x = c.getContext('2d');
-    x.font = '600 ' + SZ + 'px Wordmark, sans-serif';
+    x.font = '700 ' + SZ + 'px Onest, sans-serif';
     x.textBaseline = 'alphabetic'; x.textAlign = 'left';
     /* the vertical wash is baked per glyph so the whole word shares one ramp */
     const gy0 = PAD + g.asc - ascMax, gy1 = PAD + g.asc + descMax * .4;
@@ -4433,7 +4473,7 @@ function wireHeroExit() {
 function wireNav() {
   let last = 0;
   const rail = $('#rail');
-  const names = ['The Hidden Gate', 'The Sanmon', 'Still Gardens', 'Sacred Craft', 'Afterlight', 'Colophon'];
+  const names = ['Overview', 'About & Education', 'Featured Projects', 'Technical Skills', 'Contact', 'Footer'];
   SECS.forEach((s, i) => {
     const b = document.createElement('button');
     b.innerHTML = '<i></i>'; b.title = names[i] || '';
@@ -4502,6 +4542,10 @@ function wireFocus() {
   $$('[data-chip]').forEach(el => {
     el.addEventListener('mouseenter', () => { set(+el.dataset.chip); $$('[data-chip]').forEach(o => o.classList.toggle('on', o === el)); });
     el.addEventListener('mouseleave', () => { set(-1); el.classList.remove('on'); });
+    el.addEventListener('click', () => {
+      const target = document.querySelector(+el.dataset.chip === 3 ? '#lessons' : '#pathways');
+      if (target) scrollTo({ top: target.offsetTop - 40, behavior: REDUCE ? 'auto' : 'smooth' });
+    });
   });
   $$('[data-les]').forEach(el => {
     el.addEventListener('mouseenter', () => set(+el.dataset.les % 4));
@@ -4805,7 +4849,7 @@ function queue() { TIMER ? setTimeout(() => frame(performance.now()), 16) : requ
 
 /* ======================================================== 14 · booting */
 const JOBS = [
-  ['Reading the type', () => document.fonts && document.fonts.load('600 320px Wordmark')],
+  ['Reading the type', () => document.fonts && document.fonts.load('700 320px Onest')],
   ['Pouring the ground', () => { initGL(); WORLD.uT = { value: 0 }; buildRig(); buildLights(); }],
   ['Cutting the approach', () => buildShell()],
   ['Raising the hall', () => buildTemple()],
