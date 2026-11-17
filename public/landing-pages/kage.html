@@ -45,15 +45,18 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 #gl{
   position:fixed; inset:0; width:100%; height:100%;
   display:block; z-index:0; background:#05070a;
+  will-change:transform; contain:strict;
 }
 #grain{
   position:fixed; inset:-1px; z-index:60; pointer-events:none;
   opacity:.055; mix-blend-mode:overlay;
   background-repeat:repeat; background-size:180px 180px;
+  will-change:transform; contain:strict;
 }
 #vignette{
   position:fixed; inset:0; z-index:55; pointer-events:none;
   background:radial-gradient(125% 95% at 50% 42%, transparent 40%, rgba(2,4,6,.55) 100%);
+  will-change:transform; contain:strict;
 }
 .page{ position:relative; z-index:10; }
 
@@ -119,6 +122,7 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
   position:fixed; top:0; left:0; width:var(--vw, 100%); height:var(--nav-h); z-index:50;
   display:flex; align-items:center; gap:24px; padding:0 var(--pad);
   transition:transform .55s var(--ease);
+  will-change:transform;
 }
 /* The sticky wash sits on its own layer rather than on the bar. A
    backdrop-filter promotes its element to the containing block for any
@@ -199,6 +203,7 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
   position:absolute; z-index:2; right:clamp(78px,11vw,190px); top:clamp(132px,25vh,238px);
   width:clamp(150px,16vw,262px); display:block;
   transition:transform .8s var(--ease-out);
+  will-change:transform, opacity, filter;
 }
 .peek-fr{ display:block; aspect-ratio:16/10;
   background:linear-gradient(180deg, rgba(3,6,9,.04) 24%, rgba(3,6,9,.48) 100%),
@@ -330,11 +335,13 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
   translate:-50% -50%;                /* leaves transform free for the swell */
   mix-blend-mode:screen;
   animation:glow-swell var(--gt2) var(--ease-io) infinite alternate;
+  will-change:transform;
 }
 .glow::before{
   content:''; position:absolute; inset:0; border-radius:50%;
   background:radial-gradient(closest-side, var(--gc1), var(--gc2) 40%, transparent 72%);
   animation:glow-pulse var(--gt) var(--ease-io) infinite;
+  will-change:opacity;
 }
 @keyframes glow-swell{ from{ transform:scale(.93); } to{ transform:scale(1.07); } }
 @keyframes glow-pulse{ from{ opacity:.78; } 50%{ opacity:1; } to{ opacity:.78; } }
@@ -456,6 +463,7 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 /* ============================================================= cursor */
 .cur-dot{ position:fixed; z-index:80; top:0; left:0; width:26px; height:26px; margin:-13px 0 0 -13px;
   border:1px solid rgba(223,231,224,.42); border-radius:50%; pointer-events:none;
+  will-change:transform;
   transition:width .35s var(--ease-out), height .35s var(--ease-out), margin .35s var(--ease-out),
              background .35s, border-color .35s, opacity .3s; opacity:0; }
 .cur-dot.act{ width:52px; height:52px; margin:-26px 0 0 -26px; background:rgba(223,231,224,.07); border-color:rgba(223,231,224,.6); }
@@ -680,7 +688,7 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
    viewport-wide, so each overhang is cut precisely where it leaves the screen.
    `clip` pairs with `visible` without coercing it, so no scroll container is
    created and every bit of vertical bleed survives. */
-.sec, .foot{ overflow-x:clip; overflow-y:visible; }
+.sec, .foot{ overflow-x:clip; overflow-y:visible; contain:layout style; }
 /* the host for whichever chapter currently owns the near plane — no box of
    its own, since every stage it holds is position:fixed to the viewport */
 #fg-sky{
@@ -711,6 +719,9 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 .fg.fg-active,.fg.fg-retiring{
   position:fixed; left:0; right:0; top:auto; bottom:0; height:min(56svh,680px);
   z-index:1; overflow:visible; pointer-events:none;
+}
+.fg.fg-active .fg-el,.fg.fg-retiring .fg-el{
+  will-change:transform, opacity, filter;
 }
 .fg.fg-active .fg-el{
   opacity:1; transform:none;
@@ -1085,13 +1096,13 @@ body[data-layout-gallery="b"] .card:not(:first-child) .card-fr,
 <section class="sec" id="gate" data-cam="1">
   <div class="fg" data-fg="gate" aria-hidden="true">
     <span class="fg-el fg-wall" data-fg-in="left">
-      <img src="secret-pathways-assets/foreground/png/temple-wall.webp" alt="" width="1536" height="884" loading="lazy" decoding="async">
+      <img src="secret-pathways-assets/foreground/png/temple-wall.webp" alt="" width="1536" height="884" decoding="async">
     </span>
     <span class="fg-el fg-pine" data-fg-in="right">
-      <img src="secret-pathways-assets/foreground/png/pine-tree.webp" alt="" width="1024" height="1438" loading="lazy" decoding="async">
+      <img src="secret-pathways-assets/foreground/png/pine-tree.webp" alt="" width="1024" height="1438" decoding="async">
     </span>
     <span class="fg-el fg-grass" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/tall-grass.webp" alt="" width="1717" height="916" loading="lazy" decoding="async">
+      <img src="secret-pathways-assets/foreground/png/tall-grass.webp" alt="" width="1717" height="916" decoding="async">
     </span>
   </div>
   <div class="sec-head" data-rv="fade">
@@ -1131,16 +1142,16 @@ body[data-layout-gallery="b"] .card:not(:first-child) .card-fr,
 <section class="sec" id="pathways" data-cam="2">
   <div class="fg" data-fg="pathways" aria-hidden="true">
     <span class="fg-el fg-sakura fg-el--sway" data-fg-in="left">
-      <img src="secret-pathways-assets/foreground/png/sakura-branch.webp" alt="" width="1536" height="1024" loading="lazy" decoding="async">
+      <img src="secret-pathways-assets/foreground/png/sakura-branch.webp" alt="" width="1536" height="1024" decoding="async">
     </span>
     <span class="fg-el fg-leaves fg-el--sway" data-fg-in="right">
-      <img src="secret-pathways-assets/foreground/png/maple-leaves.webp" alt="" width="1536" height="1024" loading="lazy" decoding="async">
+      <img src="secret-pathways-assets/foreground/png/maple-leaves.webp" alt="" width="1536" height="1024" decoding="async">
     </span>
     <span class="fg-el fg-lantern" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/stone-lantern.webp" alt="" width="1024" height="1499" loading="lazy" decoding="async">
+      <img src="secret-pathways-assets/foreground/png/stone-lantern.webp" alt="" width="1024" height="1499" decoding="async">
     </span>
     <span class="fg-el fg-bush" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/garden-bush.webp" alt="" width="1717" height="876" loading="lazy" decoding="async">
+      <img src="secret-pathways-assets/foreground/png/garden-bush.webp" alt="" width="1717" height="876" decoding="async">
     </span>
   </div>
   <div class="sec-head" data-rv="fade">
@@ -1206,13 +1217,13 @@ body[data-layout-gallery="b"] .card:not(:first-child) .card-fr,
 <section class="sec" id="lessons" data-cam="3">
   <div class="fg" data-fg="lessons" aria-hidden="true">
     <span class="fg-el fg-wall fg-el--flip" data-fg-in="right">
-      <img src="secret-pathways-assets/foreground/png/temple-wall.webp" alt="" width="1536" height="884" loading="lazy" decoding="async">
+      <img src="secret-pathways-assets/foreground/png/temple-wall.webp" alt="" width="1536" height="884" decoding="async">
     </span>
     <span class="fg-el fg-stones" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/basalt-stones.webp" alt="" width="1536" height="996" loading="lazy" decoding="async">
+      <img src="secret-pathways-assets/foreground/png/basalt-stones.webp" alt="" width="1536" height="996" decoding="async">
     </span>
     <span class="fg-el fg-grass" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/tall-grass.webp" alt="" width="1717" height="916" loading="lazy" decoding="async">
+      <img src="secret-pathways-assets/foreground/png/tall-grass.webp" alt="" width="1717" height="916" decoding="async">
     </span>
   </div>
   <div class="sec-head" data-rv="fade">
@@ -1260,16 +1271,16 @@ body[data-layout-gallery="b"] .card:not(:first-child) .card-fr,
 <section class="sec fin" id="eternity" data-cam="4">
   <div class="fg" data-fg="eternity" aria-hidden="true">
     <span class="fg-el fg-hill" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/hill.webp" alt="" width="1774" height="887" loading="lazy" decoding="async">
+      <img src="secret-pathways-assets/foreground/png/hill.webp" alt="" width="1774" height="887" decoding="async">
     </span>
     <span class="fg-el fg-ruins" data-fg-in="left">
-      <img src="secret-pathways-assets/foreground/png/shrine-ruins.webp" alt="" width="1536" height="1001" loading="lazy" decoding="async">
+      <img src="secret-pathways-assets/foreground/png/shrine-ruins.webp" alt="" width="1536" height="1001" decoding="async">
     </span>
     <span class="fg-el fg-grass" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/tall-grass.webp" alt="" width="1717" height="916" loading="lazy" decoding="async">
+      <img src="secret-pathways-assets/foreground/png/tall-grass.webp" alt="" width="1717" height="916" decoding="async">
     </span>
     <span class="fg-el fg-sakura" data-fg-in="left">
-      <img src="secret-pathways-assets/foreground/png/sakura-branch.webp" alt="" width="1536" height="1024" loading="lazy" decoding="async">
+      <img src="secret-pathways-assets/foreground/png/sakura-branch.webp" alt="" width="1536" height="1024" decoding="async">
     </span>
   </div>
   <div class="eyebrow" data-rv="fade">04 — Contact &amp; Connect</div>
@@ -1295,13 +1306,13 @@ body[data-layout-gallery="b"] .card:not(:first-child) .card-fr,
 <footer class="foot" data-cam="5">
   <div class="fg" data-fg="foot" aria-hidden="true">
     <span class="fg-el fg-bush" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/garden-bush.webp" alt="" width="1717" height="876" loading="lazy" decoding="async">
+      <img src="secret-pathways-assets/foreground/png/garden-bush.webp" alt="" width="1717" height="876" decoding="async">
     </span>
     <span class="fg-el fg-grass" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/tall-grass.webp" alt="" width="1717" height="916" loading="lazy" decoding="async">
+      <img src="secret-pathways-assets/foreground/png/tall-grass.webp" alt="" width="1717" height="916" decoding="async">
     </span>
     <span class="fg-el fg-stones" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/basalt-stones.webp" alt="" width="1536" height="996" loading="lazy" decoding="async">
+      <img src="secret-pathways-assets/foreground/png/basalt-stones.webp" alt="" width="1536" height="996" decoding="async">
     </span>
   </div>
   <div class="foot-grid">
@@ -2405,18 +2416,20 @@ const canvas = document.getElementById('gl');
    renders a frame wider than the phone shows and drops the right edge of the
    scene off-screen, which is how the wordmark lost its last letter. Every
    size, aspect and pointer mapping below goes through these. */
-const vpW = () => document.documentElement.clientWidth  || innerWidth;
-const vpH = () => document.documentElement.clientHeight || innerHeight;
+let _vpW = document.documentElement.clientWidth  || innerWidth;
+let _vpH = document.documentElement.clientHeight || innerHeight;
+const vpW = () => _vpW;
+const vpH = () => _vpH;
 let renderer, scene, camera, maxAniso = 1;
 const HI = qs('q', COARSE ? 'low' : 'high');
 const LOW = HI === 'low';
 const WANT_POST    = qs('post', '1') !== '0';
 const WANT_SHADOW  = qs('shadow', LOW ? '0' : '1') !== '0';
-const DPR_CAP      = qn('dpr', LOW ? 1.4 : 1.8);
+const DPR_CAP      = qn('dpr', LOW ? 1.25 : 1.5);
 /* the renderer trades resolution for frame rate on its own — the scene is
    fill-bound (five big alpha-blended veils plus a bloom chain), so pixels
    are the only knob worth turning on unknown hardware */
-const PERF = { scale: 1, acc: 0, n: 0, locked: qs('adapt', '1') === '0' };
+const PERF = { scale: 1, acc: 0, n: 0, locked: qs('adapt', '1') === '0', coolUntil: 0 };
 
 function initGL() {
   if (qs('nogl', '0') !== '0' || !window.THREE) throw new Error('webgl disabled');
@@ -2652,12 +2665,14 @@ function buildShell() {
      which is the only reason the ground plane can just stop out there */
   /* z, centre y, width, height, x — kept low: a crest that climbs past the
      hall's eaves stops reading as distance and starts reading as a cut-out */
-  const ridgeMap = tx(texRidge(), { wrap: THREE.RepeatWrapping, repeat: [1.7, 1] });
+  const ridgeCanvas = lib('ridge', () => texRidge());
+  const ridgeMap = tx(ridgeCanvas, { wrap: THREE.RepeatWrapping, repeat: [1.7, 1] });
+  const ridgeFull = tx(ridgeCanvas);
   [[-90, 13, 300, 26, 0], [-63, 9.5, 210, 19, 16]].forEach((r, i) => {
     const m = new THREE.Mesh(new THREE.PlaneGeometry(r[2], r[3]),
       /* fog off: at a hundred metres it would lift a black silhouette to 80%
          of the fog colour, and the treeline came back as a *pale* band */
-      new THREE.MeshBasicMaterial({ map: i ? tx(texRidge()) : ridgeMap, transparent: true,
+      new THREE.MeshBasicMaterial({ map: i ? ridgeFull : ridgeMap, transparent: true,
         color: i ? 0x0a1015 : 0x06090d, depthWrite: false, fog: false }));
     m.position.set(r[4], r[1], r[0]); m.renderOrder = 1; scene.add(m);
   });
@@ -2665,8 +2680,8 @@ function buildShell() {
   /* floor + podium */
   const fT = texFloor();
   const floorMat = new THREE.MeshStandardMaterial({
-    map: tx(fT.map, { wrap: THREE.RepeatWrapping, repeat: [7, 7], aniso: 16 }),
-    normalMap: tx(fT.normal, { wrap: THREE.RepeatWrapping, repeat: [7, 7], srgb: false, aniso: 16 }),
+    map: tx(fT.map, { wrap: THREE.RepeatWrapping, repeat: [7, 7], aniso: 8 }),
+    normalMap: tx(fT.normal, { wrap: THREE.RepeatWrapping, repeat: [7, 7], srgb: false, aniso: 8 }),
     roughnessMap: tx(fT.rough, { wrap: THREE.RepeatWrapping, repeat: [3.4, 3.4], srgb: false }),
     normalScale: new THREE.Vector2(.30, .30),
     /* The court used to carry a planar mirror and this was tuned to feed it —
@@ -2686,8 +2701,8 @@ function buildShell() {
      the reflection buffer sample itself. It is also deliberately matte — with
      the floor's metalness the forty risers strobed as the camera drifted. */
   const platMat = new THREE.MeshStandardMaterial({
-    map: tx(fT.map, { wrap: THREE.RepeatWrapping, repeat: [3, 1.2], aniso: 16 }),
-    normalMap: tx(fT.normal, { wrap: THREE.RepeatWrapping, repeat: [3, 1.2], srgb: false, aniso: 16 }),
+    map: tx(fT.map, { wrap: THREE.RepeatWrapping, repeat: [3, 1.2], aniso: 8 }),
+    normalMap: tx(fT.normal, { wrap: THREE.RepeatWrapping, repeat: [3, 1.2], srgb: false, aniso: 8 }),
     normalScale: new THREE.Vector2(.18, .18), roughness: .93, metalness: .02, color: 0x58636a
   });
   /* the podium the hall stands on */
@@ -2738,32 +2753,28 @@ function buildTemple() {
     depthWrite: false, fog: true });
   WORLD.paper = paper;
 
-  /* one lit bay: a glowing sheet with a lattice hung just in front of it */
+  /* one lit bay: a glowing sheet with a lattice hung just in front of it (merged) */
+  const paperGeos = [], gridGeos = [], postGeos = [];
   function bay(w, h, x, y, z) {
-    const p = new THREE.Mesh(new THREE.PlaneGeometry(w, h), paper);
-    p.position.set(x, y, z); g.add(p);
-    const s = new THREE.Mesh(new THREE.PlaneGeometry(w, h), grid);
-    s.position.set(x, y, z + .06); s.renderOrder = 3; g.add(s);
+    paperGeos.push(new THREE.PlaneGeometry(w, h).translate(x, y, z));
+    gridGeos.push(new THREE.PlaneGeometry(w, h).translate(x, y, z + .06));
   }
   /* The block-and-arm band that carries every eave. The pieces are merged, so
      they carry absolute coordinates — TEMPLE_Z has to go in here, not on the
      mesh, or the whole band ends up hanging in the air by the camera. */
   function brackets(halfW, halfD, y, step) {
-    const parts = [];
     for (let x = -halfW; x <= halfW + 1e-3; x += step) {
       [-halfD, halfD].forEach(dz => {
-        parts.push(new THREE.BoxGeometry(.34, .46, .34).translate(x, y, TEMPLE_Z + dz));
-        parts.push(new THREE.BoxGeometry(.92, .17, .24).translate(x, y + .30, TEMPLE_Z + dz));
+        postGeos.push(new THREE.BoxGeometry(.34, .46, .34).translate(x, y, TEMPLE_Z + dz));
+        postGeos.push(new THREE.BoxGeometry(.92, .17, .24).translate(x, y + .30, TEMPLE_Z + dz));
       });
     }
     for (let dz = -halfD + step; dz < halfD - 1e-3; dz += step) {
       [-halfW, halfW].forEach(x => {
-        parts.push(new THREE.BoxGeometry(.34, .46, .34).translate(x, y, TEMPLE_Z + dz));
-        parts.push(new THREE.BoxGeometry(.24, .17, .92).translate(x, y + .30, TEMPLE_Z + dz));
+        postGeos.push(new THREE.BoxGeometry(.34, .46, .34).translate(x, y, TEMPLE_Z + dz));
+        postGeos.push(new THREE.BoxGeometry(.24, .17, .92).translate(x, y + .30, TEMPLE_Z + dz));
       });
     }
-    const m = new THREE.Mesh(mergeGeos(parts), post);
-    m.castShadow = false; g.add(m);
   }
 
   const F = PODIUM;                                   /* the hall's floor level */
@@ -2779,8 +2790,7 @@ function buildTemple() {
     const c = new THREE.Mesh(new THREE.CylinderGeometry(.30, .34, 5.0, 14), post);
     c.position.set(-7.0 + i * 2.8, F + 2.5, TEMPLE_Z + 4.24); c.castShadow = true; g.add(c);
   }
-  const sill = new THREE.Mesh(new THREE.BoxGeometry(14.6, .40, 8.9), post);
-  sill.position.set(0, F + .20, TEMPLE_Z); g.add(sill);
+  postGeos.push(new THREE.BoxGeometry(14.6, .40, 8.9).translate(0, F + .20, TEMPLE_Z));
   brackets(7.0, 4.4, F + 5.15, 1.40);
 
   /* ---- the pent roof over the ground storey ---------------------------- */
@@ -2790,15 +2800,12 @@ function buildTemple() {
   /* ---- upper storey: railed gallery, dark boards, the temple's name ----- */
   const up = new THREE.Mesh(new THREE.BoxGeometry(10.0, 3.4, 6.0), timber);
   up.position.set(0, F + 9.4, TEMPLE_Z); up.castShadow = true; g.add(up);
-  const deck = new THREE.Mesh(new THREE.BoxGeometry(12.4, .26, 8.4), post);
-  deck.position.set(0, F + 7.72, TEMPLE_Z); g.add(deck);
+  postGeos.push(new THREE.BoxGeometry(12.4, .26, 8.4).translate(0, F + 7.72, TEMPLE_Z));
   [.10, .94].forEach(dy => [4.2, -4.2].forEach(dz => {
-    const r = new THREE.Mesh(new THREE.BoxGeometry(12.4, .17, .17), post);
-    r.position.set(0, F + 7.85 + dy, TEMPLE_Z + dz); g.add(r);
+    postGeos.push(new THREE.BoxGeometry(12.4, .17, .17).translate(0, F + 7.85 + dy, TEMPLE_Z + dz));
   }));
   for (let i = 0; i <= 16; i++) {
-    const b = new THREE.Mesh(new THREE.BoxGeometry(.10, 1.05, .10), post);
-    b.position.set(-6.2 + i * .775, F + 8.42, TEMPLE_Z + 4.2); g.add(b);
+    postGeos.push(new THREE.BoxGeometry(.10, 1.05, .10).translate(-6.2 + i * .775, F + 8.42, TEMPLE_Z + 4.2));
   }
   for (let i = 0; i < 4; i++)
     bay(1.0, 1.35, -4.5 + i * 3.0, F + 9.5, TEMPLE_Z + 3.06);
@@ -2829,6 +2836,12 @@ function buildTemple() {
     const r = new THREE.Mesh(roofGeo(5.0, 4.0, 1.4, 1.9, .32, .26), tileMat);
     r.position.set(s * 10.6, F + 3.4, TEMPLE_Z + 1.4); r.castShadow = true; g.add(r);
   });
+
+  const postMerged = new THREE.Mesh(mergeGeos(postGeos), post);
+  postMerged.castShadow = false; g.add(postMerged);
+  g.add(new THREE.Mesh(mergeGeos(paperGeos), paper));
+  const gridMerged = new THREE.Mesh(mergeGeos(gridGeos), grid);
+  gridMerged.renderOrder = 3; g.add(gridMerged);
 
   scene.add(g); WORLD.temple = g;
 
@@ -2982,9 +2995,11 @@ function buildLantern(x, z, s, y) {
   const tip = new THREE.Mesh(new THREE.ConeGeometry(.055, .16, 10), stone);
   tip.position.y = 2.4; g.add(tip);
 
-  const glow = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 3.4),
-    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(255,120,60,.9)', 'rgba(255,60,24,.28)')),
-      transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, opacity: .5 }));
+  const glowMat = lib('lanternGlowMat', () => new THREE.MeshBasicMaterial({
+    map: tx(texGlow('rgba(255,120,60,.9)', 'rgba(255,60,24,.28)')),
+    transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, opacity: .5
+  }));
+  const glow = new THREE.Mesh(lib('lanternGlowGeo', () => new THREE.PlaneGeometry(3.4, 3.4)), glowMat);
   glow.position.y = 1.66; glow.renderOrder = 2; g.add(glow);
   glow.userData.billboard = true;
 
@@ -3033,14 +3048,30 @@ function buildMaple(seed, x, z, scale) {
     const a = i / 4 * TAU + rnd();
     branch(new THREE.Vector3(0, 1.5, 0), new THREE.Vector3(Math.cos(a) * .8, .8, Math.sin(a) * .8).normalize(), 1.45, .155, 0);
   }
-  const trunk = new THREE.Mesh(mergeGeos(parts),
-    new THREE.MeshStandardMaterial({ color: 0x171413, roughness: .94, metalness: .0, side: THREE.DoubleSide }));
+  const trunkMat = lib('mapleTrunkMat', () => new THREE.MeshStandardMaterial({
+    color: 0x171413, roughness: .94, metalness: .0, side: THREE.DoubleSide
+  }));
+  const trunk = new THREE.Mesh(mergeGeos(parts), trunkMat);
   trunk.castShadow = true;
 
-  const leafGeo = new THREE.PlaneGeometry(.36, .36);
-  const leafMat = new THREE.MeshStandardMaterial({
-    map: tx(texLeaf()), color: 0x2b0406, alphaTest: .42, side: THREE.DoubleSide,
-    roughness: .86, metalness: 0, emissive: 0x080000, emissiveIntensity: .12
+  const leafGeo = lib('mapleLeafGeo', () => new THREE.PlaneGeometry(.36, .36));
+  const leafTex = lib('leafTex', () => tx(texLeaf()));
+  const leafMat = lib('mapleLeafMat', () => {
+    const m = new THREE.MeshLambertMaterial({
+      map: leafTex, color: 0x2b0406, alphaTest: .42, side: THREE.DoubleSide,
+      emissive: 0x080000, emissiveIntensity: .12
+    });
+    /* leaves breathe in the wind */
+    m.onBeforeCompile = sh => {
+      sh.uniforms.uT = WORLD.uT;
+      sh.vertexShader = 'uniform float uT;\n' + sh.vertexShader.replace('#include <begin_vertex>',
+        '#include <begin_vertex>\n' +
+        'vec3 wp = (instanceMatrix * vec4(0.0,0.0,0.0,1.0)).xyz;\n' +
+        'float ph = wp.x*1.7 + wp.z*1.3 + wp.y*.7;\n' +
+        'transformed.x += sin(uT*1.35 + ph)*0.055;\n' +
+        'transformed.z += cos(uT*1.05 + ph*1.3)*0.045;\n');
+    };
+    return m;
   });
   const per = LOW ? 5 : 9;
   const inst = new THREE.InstancedMesh(leafGeo, leafMat, tips.length * per);
@@ -3064,16 +3095,6 @@ function buildMaple(seed, x, z, scale) {
   g.position.set(x, 0, z); g.scale.setScalar(scale || 1);
   g.rotation.y = rnd() * TAU;
   scene.add(g);
-  /* leaves breathe in the wind */
-  leafMat.onBeforeCompile = sh => {
-    sh.uniforms.uT = WORLD.uT;
-    sh.vertexShader = 'uniform float uT;\n' + sh.vertexShader.replace('#include <begin_vertex>',
-      '#include <begin_vertex>\n' +
-      'vec3 wp = (instanceMatrix * vec4(0.0,0.0,0.0,1.0)).xyz;\n' +
-      'float ph = wp.x*1.7 + wp.z*1.3 + wp.y*.7;\n' +
-      'transformed.x += sin(uT*1.35 + ph)*0.055;\n' +
-      'transformed.z += cos(uT*1.05 + ph*1.3)*0.045;\n');
-  };
   return g;
 }
 
@@ -3102,7 +3123,7 @@ function buildRocks() {
 /* ------------------------------- the transparent-PNG foreground layers */
 function cutoutMaterial(canvasEl, sway) {
   const mat = new THREE.MeshBasicMaterial({
-    map: tx(canvasEl, { aniso: 16 }), transparent: true, depthWrite: true,
+    map: tx(canvasEl, { aniso: 8 }), transparent: true, depthWrite: true,
     alphaTest: .012, side: THREE.DoubleSide, fog: true, color: 0xffffff
   });
   mat.onBeforeCompile = sh => {
@@ -3130,34 +3151,34 @@ function cutoutMaterial(canvasEl, sway) {
   return mat;
 }
 
-function buildForeground() {
-  /* the plane widths are sized against the frustum at their own depth: a
-     26-unit sheet two metres from the lens only shows its middle tenth */
-  const layers = [
-    /* name        canvas                                                                     x     y     z     w     h   sway */
-    ['grassFar',  texGrassCutout(101, { crest: .30, peak: .46, wide: .42, blades: 11000, len: 34, warm: .70, crest2: .46, crest3: .40 }),
-                  -3.4,  2.85, -0.4, 24, 12, .040],
-    ['rockLeft',  texRockCutout(404, { blobs: [[.24, .78, .48, .38], [.58, .94, .46, .30], [.84, 1.06, .42, .28]] }),
-                  -7.2,  2.55,  1.8, 17, 11.3, .010],
-    ['grassMid',  texGrassCutout(202, { crest: .60, peak: .55, wide: .40, blades: 13000, len: 40, warm: .95, crest2: -.44, crest3: .34 }),
-                   3.9,  2.86,  3.6, 15,  7.5, .062],
-    ['grassNear', texGrassCutout(303, { crest: .42, peak: .62, wide: .48, blades: 16000, len: 50, warm: .85, crest2: .42, crest3: .44 }),
-                  -1.9,  2.92,  5.6, 12,  6, .092],
-    ['bough',     texBranchCutout(505), 4.6, 2.95, 6.4, 13, 8.7, .045],
-    ['rockNear',  texRockCutout(606, { blobs: [[.18, .86, .54, .44], [.54, 1.02, .50, .36], [.86, .92, .40, .32]] }),
-                  -6.6,  1.70,  6.0, 9, 6, .008]
-  ];
-  WORLD.fg = [];
-  layers.forEach(L => {
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(L[5], L[6], 12, 12), cutoutMaterial(L[1], L[7]));
+const FG_SPECS = [
+  /* name        maker                                                                                     x     y     z     w     h   sway */
+  ['grassFar',  () => texGrassCutout(101, { crest: .30, peak: .46, wide: .42, blades: 11000, len: 34, warm: .70, crest2: .46, crest3: .40 }),
+                -3.4,  2.85, -0.4, 24, 12, .040],
+  ['rockLeft',  () => texRockCutout(404, { blobs: [[.24, .78, .48, .38], [.58, .94, .46, .30], [.84, 1.06, .42, .28]] }),
+                -7.2,  2.55,  1.8, 17, 11.3, .010],
+  ['grassMid',  () => texGrassCutout(202, { crest: .60, peak: .55, wide: .40, blades: 13000, len: 40, warm: .95, crest2: -.44, crest3: .34 }),
+                 3.9,  2.86,  3.6, 15,  7.5, .062],
+  ['grassNear', () => texGrassCutout(303, { crest: .42, peak: .62, wide: .48, blades: 16000, len: 50, warm: .85, crest2: .42, crest3: .44 }),
+                -1.9,  2.92,  5.6, 12,  6, .092],
+  ['bough',     () => texBranchCutout(505), 4.6, 2.95, 6.4, 13, 8.7, .045],
+  ['rockNear',  () => texRockCutout(606, { blobs: [[.18, .86, .54, .44], [.54, 1.02, .50, .36], [.86, .92, .40, .32]] }),
+                -6.6,  1.70,  6.0, 9, 6, .008]
+];
+function buildForegroundRange(from, to) {
+  WORLD.fg = WORLD.fg || [];
+  for (let idx = from; idx < to && idx < FG_SPECS.length; idx++) {
+    const L = FG_SPECS[idx];
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(L[5], L[6], 12, 12), cutoutMaterial(L[1](), L[7]));
     m.position.set(L[2], L[3], L[4]);
     m.renderOrder = 20 + WORLD.fg.length;
     m.name = L[0];
     m.frustumCulled = false;
     scene.add(m);
     WORLD.fg.push(m);
-  });
+  }
 }
+function buildForeground() { buildForegroundRange(0, FG_SPECS.length); }
 
 /* --------------------------------------------------- the giant wordmark */
 const WORD_Z = 3.0;
@@ -3198,7 +3219,7 @@ function buildWordmark() {
     x.fillText(g.ch, PAD + g.l, PAD + g.asc);
 
     const mesh = new THREE.Mesh(new THREE.PlaneGeometry(cw, chh),
-      new THREE.MeshBasicMaterial({ map: tx(c, { aniso: 16 }), transparent: true,
+      new THREE.MeshBasicMaterial({ map: tx(c, { aniso: 8 }), transparent: true,
         depthWrite: false, side: THREE.DoubleSide, fog: true, opacity: 1 }));
     mesh.position.set(g.pen + (g.r - g.l) / 2, (g.asc - g.desc) / 2 + (PAD - PAD) , 0);
     mesh.position.y = (g.asc - g.desc) / 2;
@@ -3332,9 +3353,9 @@ function buildAtmosphere() {
 const LEAF_AHEAD = 11, LEAF_SPREAD = 12, LEAF_R = 30;
 function buildLeafFall() {
   const N = LOW ? 110 : 260;
-  const mat = new THREE.MeshStandardMaterial({
-    map: tx(texLeaf()), alphaTest: .42, side: THREE.DoubleSide,
-    color: 0x40080a, roughness: .84, metalness: 0,
+  const mat = new THREE.MeshLambertMaterial({
+    map: lib('leafTex', () => tx(texLeaf())), alphaTest: .42, side: THREE.DoubleSide,
+    color: 0x40080a,
     /* green and blue driven to nothing: the composite tone-maps at the end,
        and an emissive red with any green in it comes back out of that pink */
     emissive: 0x780200, emissiveIntensity: .72
@@ -3358,7 +3379,8 @@ const LEAF_E = new THREE.Euler(), LEAF_P = new THREE.Vector3(), LEAF_S = new THR
 const LEAF_F = new THREE.Vector3();
 function updateLeaves(dt) {
   const LV = WORLD.leaves; if (!LV) return;
-  const cy = camera.position.y, L = LV.list;
+  const cx = camera.position.x, cy = camera.position.y, cz = camera.position.z;
+  const L = LV.list;
   /* Respawn ahead of the rig, not around it. A band centred on the camera
      spends nearly all of itself behind and beside the frustum — of a couple of
      hundred leaves only a dozen were ever on screen. Recycling them into the
@@ -3367,8 +3389,8 @@ function updateLeaves(dt) {
   camera.getWorldDirection(LEAF_F);
   LEAF_F.y = 0;
   if (LEAF_F.lengthSq() < 1e-6) LEAF_F.set(0, 0, -1); else LEAF_F.normalize();
-  const fx = camera.position.x + LEAF_F.x * LEAF_AHEAD;
-  const fz = camera.position.z + LEAF_F.z * LEAF_AHEAD;
+  const fx = cx + LEAF_F.x * LEAF_AHEAD;
+  const fz = cz + LEAF_F.z * LEAF_AHEAD;
   const seed = !LV.seeded; LV.seeded = true;
   for (let i = 0; i < L.length; i++) {
     const l = L[i];
@@ -3383,16 +3405,16 @@ function updateLeaves(dt) {
     }
     /* the far wrap is a backstop for a rig that has walked away from its own
        leaves — it sits well outside the fog, so nothing is seen to jump */
-    const cx = camera.position.x, cz = camera.position.z;
     if (l.x - cx > LEAF_R) l.x -= 2 * LEAF_R; else if (l.x - cx < -LEAF_R) l.x += 2 * LEAF_R;
     if (l.z - cz > LEAF_R) l.z -= 2 * LEAF_R; else if (l.z - cz < -LEAF_R) l.z += 2 * LEAF_R;
     /* the side-slip of a leaf shedding air off one edge, then the other */
-    const sw = Math.sin(clock * l.sway + l.swayPh);
+    const arg = clock * l.sway + l.swayPh;
+    const sw = Math.sin(arg);
     LEAF_P.set(l.x + sw * l.swayAmp, l.y,
                l.z + Math.cos(clock * l.sway * .7 + l.swayPh) * l.swayAmp * .6);
     LEAF_E.set(l.roll, l.tilt, sw * .55);
     LEAF_Q.setFromEuler(LEAF_E);
-    LEAF_S.setScalar(l.s);
+    LEAF_S.set(l.s, l.s, l.s);
     LEAF_M.compose(LEAF_P, LEAF_Q, LEAF_S);
     LV.mesh.setMatrixAt(i, LEAF_M);
   }
@@ -3449,9 +3471,12 @@ function buildWisps() {
   for (let i = 0; i < N; i++) WISP.list.push({ life: 0, max: 1, vx: 0, vy: 0, sz: 0, ph: 0 });
 }
 /* the pointer, in camera space, on the plane the trail hangs on */
+const _wpt = [0, 0];
 function wispPoint(nx, ny) {
   const hh = Math.tan(camera.fov * Math.PI / 360) * WISP_D;
-  return [nx * hh * camera.aspect, ny * hh];
+  _wpt[0] = nx * hh * camera.aspect;
+  _wpt[1] = ny * hh;
+  return _wpt;
 }
 function updateWisps(dt) {
   if (!WISP.mesh) return;
@@ -3640,8 +3665,9 @@ void main () {
   outColor = vec4(vec3(uDark) * a, a);
 }`;
 
-const CL_SEG = 96, CL_NODES = CL_SEG + 1, CL_DT = 1 / 120;
-const CL_WAVE = 30, CL_STIFF = 0.55, CL_GAIN = 5.0, CL_BLEED = 48;
+const CL_SEG = 48, CL_NODES = CL_SEG + 1, CL_DT = 1 / 60;
+const CL_WAVE = 15, CL_STIFF = 0.55, CL_GAIN = 5.0, CL_BLEED = 48;
+const CLOTHS = [];
 const CLOTH_DEFAULTS = {
   pin: 'top', wind: 3, speed: .5, amplitude: 30, drape: 40, brush: 2.05,
   brushSize: 150, damping: 1, light: .5, sheen: .1, shadow: .25,
@@ -3656,7 +3682,7 @@ function createCloth(output, plate, options) {
   output.style.height = 'calc(100% + ' + CL_BLEED * 2 + 'px)';
 
   const gl = output.getContext('webgl2', { alpha: true, depth: false, stencil: false,
-    antialias: true, premultipliedAlpha: true });
+    antialias: false, premultipliedAlpha: true });
   if (!gl || gl.isContextLost()) return null;
 
   const compile = (type, text) => {
@@ -3682,7 +3708,7 @@ function createCloth(output, plate, options) {
     const i = (y * CL_NODES + x) * 2;
     gridVerts[i] = x / CL_SEG; gridVerts[i + 1] = y / CL_SEG;
   }
-  const idx = new Uint32Array(CL_SEG * CL_SEG * 6);
+  const idx = new Uint16Array(CL_SEG * CL_SEG * 6);
   let o = 0;
   for (let y = 0; y < CL_SEG; y++) for (let x = 0; x < CL_SEG; x++) {
     const a = y * CL_NODES + x, b = a + 1, c = a + CL_NODES, d = c + 1;
@@ -3725,11 +3751,17 @@ function createCloth(output, plate, options) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, c);
   }
 
+  let resW = 1, resH = 1, outW = 1, outH = 1;
   function syncSize() {
-    const dpr = Math.min(devicePixelRatio || 1, 2);
-    const w = Math.max(1, Math.round(output.clientWidth * dpr));
-    const h = Math.max(1, Math.round(output.clientHeight * dpr));
+    const dpr = Math.min(devicePixelRatio || 1, LOW ? 1.25 : 1.5);
+    const rw = Math.max(wrapper.clientWidth, 1), rh = Math.max(wrapper.clientHeight, 1);
+    const ow = Math.max(output.clientWidth, 1), oh = Math.max(output.clientHeight, 1);
+    const w = Math.max(1, Math.round(ow * dpr));
+    const h = Math.max(1, Math.round(oh * dpr));
+    const changed = rw !== resW || rh !== resH || output.width !== w || output.height !== h;
+    resW = rw; resH = rh; outW = ow; outH = oh;
     if (output.width !== w || output.height !== h) { output.width = w; output.height = h; }
+    return changed;
   }
 
   let hCur = new Float32Array(CL_NODES * CL_NODES);
@@ -3746,9 +3778,10 @@ function createCloth(output, plate, options) {
   let edge = .048, edgeTo = .048;   /* barely there at rest, found on hover */
   const ptr = { x: -1e5, y: -1e5, inside: false };
   const touch = { x: -1e5, y: -1e5, vx: 0, vy: 0, s: 0 };
-  const axisA = (x, y) => config.pin === 'top' ? y : config.pin === 'bottom' ? CL_SEG - y
+  const isTop = config.pin === 'top';
+  const axisA = (x, y) => isTop ? y : config.pin === 'bottom' ? CL_SEG - y
     : config.pin === 'left' ? x : CL_SEG - x;
-  const axisB = (x, y) => (config.pin === 'top' || config.pin === 'bottom') ? x : y;
+  const axisB = (x, y) => (isTop || config.pin === 'bottom') ? x : y;
 
   function stepSim(dt) {
     simTime += dt * Math.max(config.speed, 0);
@@ -3762,27 +3795,69 @@ function createCloth(output, plate, options) {
       colF[a] = (.7 + .3 * Math.sin(ka * a - 1.7 * t)) * hang[a];
     const c2 = CL_WAVE * CL_WAVE, dt2 = dt * dt;
     const decay = Math.exp(-Math.min(Math.max(config.damping, .05), 8) * dt);
-    for (let y = 0; y < CL_NODES; y++) {
-      const up = Math.max(y - 1, 0) * CL_NODES, down = Math.min(y + 1, CL_SEG) * CL_NODES;
-      const row = y * CL_NODES;
-      for (let x = 0; x < CL_NODES; x++) {
-        const i = row + x;
-        const h = hCur[i];
-        const lap = hCur[row + Math.max(x - 1, 0)] + hCur[row + Math.min(x + 1, CL_SEG)]
-          + hCur[up + x] + hCur[down + x] - 4 * h;
-        const force = windAmp * rowF[axisB(x, y)] * colF[axisA(x, y)];
-        const next = 2 * h - hPrev[i] + dt2 * (c2 * lap - CL_STIFF * h + force);
-        let v = h + (next - h) * decay;
-        if (v > 3.5) v = 3.5; else if (v < -3.5) v = -3.5;
-        hNext[i] = v;
+    if (isTop) {
+      /* Fast interior pass + boundary edge rows without per-node closures or min/max */
+      for (let x = 0; x < CL_NODES; x++) hNext[x] = 0;
+      for (let y = 1; y < CL_SEG; y++) {
+        const up = (y - 1) * CL_NODES, row = y * CL_NODES, down = (y + 1) * CL_NODES;
+        const fy = windAmp * colF[y];
+        /* x = 0 */
+        {
+          const h = hCur[row];
+          const lap = h + hCur[row + 1] + hCur[up] + hCur[down] - 4 * h;
+          let v = h + ((2 * h - hPrev[row] + dt2 * (c2 * lap - CL_STIFF * h + fy * rowF[0])) - h) * decay;
+          hNext[row] = v > 3.5 ? 3.5 : (v < -3.5 ? -3.5 : v);
+        }
+        /* interior 1 .. CL_SEG - 1 */
+        for (let x = 1; x < CL_SEG; x++) {
+          const i = row + x, h = hCur[i];
+          const lap = hCur[i - 1] + hCur[i + 1] + hCur[up + x] + hCur[down + x] - 4 * h;
+          const next = 2 * h - hPrev[i] + dt2 * (c2 * lap - CL_STIFF * h + fy * rowF[x]);
+          let v = h + (next - h) * decay;
+          hNext[i] = v > 3.5 ? 3.5 : (v < -3.5 ? -3.5 : v);
+        }
+        /* x = CL_SEG */
+        {
+          const i = row + CL_SEG, h = hCur[i];
+          const lap = hCur[i - 1] + h + hCur[up + CL_SEG] + hCur[down + CL_SEG] - 4 * h;
+          let v = h + ((2 * h - hPrev[i] + dt2 * (c2 * lap - CL_STIFF * h + fy * rowF[CL_SEG])) - h) * decay;
+          hNext[i] = v > 3.5 ? 3.5 : (v < -3.5 ? -3.5 : v);
+        }
       }
-    }
-    for (let b = 0; b < CL_NODES; b++) {
-      let x = b, y = 0;
-      if (config.pin === 'bottom') y = CL_SEG;
-      else if (config.pin === 'left') { x = 0; y = b; }
-      else if (config.pin === 'right') { x = CL_SEG; y = b; }
-      hNext[y * CL_NODES + x] = 0;
+      /* y = CL_SEG */
+      {
+        const up = (CL_SEG - 1) * CL_NODES, row = CL_SEG * CL_NODES, fy = windAmp * colF[CL_SEG];
+        for (let x = 0; x < CL_NODES; x++) {
+          const i = row + x, h = hCur[i];
+          const l = x > 0 ? hCur[i - 1] : h, r = x < CL_SEG ? hCur[i + 1] : h;
+          const lap = l + r + hCur[up + x] + h - 4 * h;
+          let v = h + ((2 * h - hPrev[i] + dt2 * (c2 * lap - CL_STIFF * h + fy * rowF[x])) - h) * decay;
+          hNext[i] = v > 3.5 ? 3.5 : (v < -3.5 ? -3.5 : v);
+        }
+      }
+    } else {
+      for (let y = 0; y < CL_NODES; y++) {
+        const up = Math.max(y - 1, 0) * CL_NODES, down = Math.min(y + 1, CL_SEG) * CL_NODES;
+        const row = y * CL_NODES;
+        for (let x = 0; x < CL_NODES; x++) {
+          const i = row + x;
+          const h = hCur[i];
+          const lap = hCur[row + Math.max(x - 1, 0)] + hCur[row + Math.min(x + 1, CL_SEG)]
+            + hCur[up + x] + hCur[down + x] - 4 * h;
+          const force = windAmp * rowF[axisB(x, y)] * colF[axisA(x, y)];
+          const next = 2 * h - hPrev[i] + dt2 * (c2 * lap - CL_STIFF * h + force);
+          let v = h + (next - h) * decay;
+          if (v > 3.5) v = 3.5; else if (v < -3.5) v = -3.5;
+          hNext[i] = v;
+        }
+      }
+      for (let b = 0; b < CL_NODES; b++) {
+        let x = b, y = 0;
+        if (config.pin === 'bottom') y = CL_SEG;
+        else if (config.pin === 'left') { x = 0; y = b; }
+        else if (config.pin === 'right') { x = CL_SEG; y = b; }
+        hNext[y * CL_NODES + x] = 0;
+      }
     }
     const spent = hPrev; hPrev = hCur; hCur = hNext; hNext = spent;
   }
@@ -3815,13 +3890,15 @@ function createCloth(output, plate, options) {
       let cum = 0;
       for (let k = anchor + 1; k < CL_NODES; k++) {
         const i = base + k * stride, dz = zF[i] - zF[i - stride];
-        cum += ds - Math.sqrt(Math.max(ds2 - dz * dz, 0));
+        const sq = ds2 - dz * dz;
+        cum += ds - (sq > 0 ? Math.sqrt(sq) : 0);
         oData[i * 2 + comp] = -cum;
       }
       cum = 0;
       for (let k = anchor - 1; k >= 0; k--) {
         const i = base + k * stride, dz = zF[i] - zF[i + stride];
-        cum += ds - Math.sqrt(Math.max(ds2 - dz * dz, 0));
+        const sq = ds2 - dz * dz;
+        cum += ds - (sq > 0 ? Math.sqrt(sq) : 0);
         oData[i * 2 + comp] = cum;
       }
     }
@@ -3831,24 +3908,36 @@ function createCloth(output, plate, options) {
     const amp = Math.max(config.amplitude, 0);
     const drape = config.drape * (.3 + .7 * gust);
     const cw = width / CL_SEG, ch = height / CL_SEG;
+    const inv2cw = 1 / (2 * cw), inv2ch = 1 / (2 * ch);
     let e = 0;
-    for (let y = 0; y < CL_NODES; y++) {
-      const row = y * CL_NODES;
-      for (let x = 0; x < CL_NODES; x++) {
-        const i = row + x, h = hCur[i];
-        if (Math.abs(h) > e) e = Math.abs(h);
-        zF[i] = amp * Math.tanh(h) + drape * hang[axisA(x, y)];
+    if (isTop) {
+      for (let y = 0; y < CL_NODES; y++) {
+        const row = y * CL_NODES, dOff = drape * hang[y];
+        for (let x = 0; x < CL_NODES; x++) {
+          const i = row + x, h = hCur[i], ah = h < 0 ? -h : h;
+          if (ah > e) e = ah;
+          zF[i] = amp * Math.tanh(h) + dOff;
+        }
+      }
+    } else {
+      for (let y = 0; y < CL_NODES; y++) {
+        const row = y * CL_NODES;
+        for (let x = 0; x < CL_NODES; x++) {
+          const i = row + x, h = hCur[i], ah = h < 0 ? -h : h;
+          if (ah > e) e = ah;
+          zF[i] = amp * Math.tanh(h) + drape * hang[axisA(x, y)];
+        }
       }
     }
     energy = e;
     for (let y = 0; y < CL_NODES; y++) {
-      const up = Math.max(y - 1, 0) * CL_NODES, down = Math.min(y + 1, CL_SEG) * CL_NODES;
+      const up = (y > 0 ? y - 1 : 0) * CL_NODES, down = (y < CL_SEG ? y + 1 : CL_SEG) * CL_NODES;
       const row = y * CL_NODES;
       for (let x = 0; x < CL_NODES; x++) {
         const i = row + x;
-        const l = row + Math.max(x - 1, 0), r = row + Math.min(x + 1, CL_SEG);
-        const dzdx = (zF[r] - zF[l]) / (2 * cw), dzdy = (zF[down + x] - zF[up + x]) / (2 * ch);
-        const inv = 1 / Math.hypot(dzdx, dzdy, 1);
+        const l = row + (x > 0 ? x - 1 : 0), r = row + (x < CL_SEG ? x + 1 : CL_SEG);
+        const dzdx = (zF[r] - zF[l]) * inv2cw, dzdy = (zF[down + x] - zF[up + x]) * inv2ch;
+        const inv = 1 / Math.sqrt(dzdx * dzdx + dzdy * dzdy + 1);
         const curve = zF[l] + zF[r] + zF[up + x] + zF[down + x] - 4 * zF[i];
         let fold = 1 - curve * .01;
         if (fold < .86) fold = .86; else if (fold > 1.06) fold = 1.06;
@@ -3857,8 +3946,8 @@ function createCloth(output, plate, options) {
       }
     }
     const mid = CL_SEG >> 1;
-    if (config.pin === 'top' || config.pin === 'bottom') {
-      foreshorten(CL_NODES, 1, ch, config.pin === 'top' ? 0 : CL_SEG, 1);
+    if (isTop || config.pin === 'bottom') {
+      foreshorten(CL_NODES, 1, ch, isTop ? 0 : CL_SEG, 1);
       foreshorten(1, CL_NODES, cw, mid, 0);
     } else {
       foreshorten(1, CL_NODES, cw, config.pin === 'left' ? 0 : CL_SEG, 0);
@@ -3867,15 +3956,15 @@ function createCloth(output, plate, options) {
   }
 
   const backing = config.backing === 'auto' ? [.02, .026, .035] : config.backing;
+  const light = Math.min(Math.max(config.light, 0), 1);
+  const radius = Math.max(config.cornerRadius, 0);
+  const lum = .299 * backing[0] + .587 * backing[1] + .114 * backing[2];
+  const dark = Math.min(Math.max((.5 - lum) / .35, 0), 1);
+  const shadowVal = Math.min(Math.max(config.shadow, 0), 1);
+  const focalVal = Math.max(config.perspective, 200);
+  const sheenVal = Math.max(config.sheen, 0);
 
   function draw() {
-    const resW = Math.max(wrapper.clientWidth, 1), resH = Math.max(wrapper.clientHeight, 1);
-    const outW = Math.max(output.clientWidth, 1), outH = Math.max(output.clientHeight, 1);
-    const light = Math.min(Math.max(config.light, 0), 1);
-    const radius = Math.max(config.cornerRadius, 0);
-    const lum = .299 * backing[0] + .587 * backing[1] + .114 * backing[2];
-    const dark = Math.min(Math.max((.5 - lum) / .35, 0), 1);
-
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.viewport(0, 0, output.width, output.height);
     gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
@@ -3889,10 +3978,10 @@ function createCloth(output, plate, options) {
     gl.uniform2f(shadow.uniforms.uRes, resW, resH);
     gl.uniform2f(shadow.uniforms.uOut, outW, outH);
     gl.uniform1f(shadow.uniforms.uBleed, CL_BLEED);
-    gl.uniform1f(shadow.uniforms.uShadow, Math.min(Math.max(config.shadow, 0), 1));
+    gl.uniform1f(shadow.uniforms.uShadow, shadowVal);
     gl.uniform1f(shadow.uniforms.uRadius, radius);
     gl.uniform1f(shadow.uniforms.uDark, dark);
-    gl.drawElements(gl.TRIANGLES, idx.length, gl.UNSIGNED_INT, 0);
+    gl.drawElements(gl.TRIANGLES, idx.length, gl.UNSIGNED_SHORT, 0);
 
     gl.useProgram(cloth.program);
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex);
@@ -3900,25 +3989,23 @@ function createCloth(output, plate, options) {
     gl.uniform2f(cloth.uniforms.uRes, resW, resH);
     gl.uniform2f(cloth.uniforms.uOut, outW, outH);
     gl.uniform1f(cloth.uniforms.uBleed, CL_BLEED);
-    gl.uniform1f(cloth.uniforms.uFocal, Math.max(config.perspective, 200));
+    gl.uniform1f(cloth.uniforms.uFocal, focalVal);
     gl.uniform1f(cloth.uniforms.uMaxX, 1);
     gl.uniform1f(cloth.uniforms.uLight, light);
-    gl.uniform1f(cloth.uniforms.uSheen, Math.max(config.sheen, 0));
+    gl.uniform1f(cloth.uniforms.uSheen, sheenVal);
     gl.uniform1f(cloth.uniforms.uRadius, radius);
     gl.uniform1f(cloth.uniforms.uDark, dark);
     gl.uniform1f(cloth.uniforms.uEdge, edge);
     gl.uniform3f(cloth.uniforms.uBacking, backing[0], backing[1], backing[2]);
-    gl.drawElements(gl.TRIANGLES, idx.length, gl.UNSIGNED_INT, 0);
+    gl.drawElements(gl.TRIANGLES, idx.length, gl.UNSIGNED_SHORT, 0);
     gl.bindVertexArray(null);
   }
 
-  let raf = 0, last = performance.now(), debt = 0, running = false, visible = false, dead = false;
-  function frame(now) {
-    if (dead) return;
-    if (!visible) { running = false; return; }
-    const delta = Math.min((now - last) / 1000, 1 / 20);
+  let raf = 0, last = performance.now(), debt = 0, active = false, visible = false, dead = false;
+  function stepFrame(now) {
+    if (dead || !visible || !active) return false;
+    const delta = Math.min(Math.max((now - last) / 1000, 0), 1 / 20);
     last = now;
-    const width = Math.max(wrapper.clientWidth, 1), height = Math.max(wrapper.clientHeight, 1);
     if (!REDUCE) {
       const t = simTime;
       const target = Math.max(.55 + .35 * Math.sin(t * .31 + 1.3)
@@ -3930,43 +4017,57 @@ function createCloth(output, plate, options) {
       touch.vx += ((ptr.x - touch.x) * om * om - 2 * om * touch.vx) * delta;
       touch.vy += ((ptr.y - touch.y) * om * om - 2 * om * touch.vy) * delta;
       touch.x += touch.vx * delta; touch.y += touch.vy * delta;
-      imprint(delta, width, height);
+      imprint(delta, resW, resH);
       edge += (edgeTo - edge) * Math.min(delta * 5, 1);
-      debt = Math.min(debt + delta, CL_DT * 5);
+      debt = Math.min(debt + delta, CL_DT * 4);
       while (debt >= CL_DT) { stepSim(CL_DT); debt -= CL_DT; }
     }
-    compose(width, height);
+    compose(resW, resH);
     draw();
-    if (REDUCE || (config.wind <= .001 && energy < .004 && touch.s < .01)) { running = false; return; }
-    raf = requestAnimationFrame(frame);
+    if (REDUCE || (config.wind <= .001 && energy < .004 && touch.s < .01)) { active = false; return false; }
+    return true;
+  }
+  function soloTick(now) {
+    if (running || !stepFrame(now)) { raf = 0; return; }
+    raf = requestAnimationFrame(soloTick);
   }
   function start() {
-    if (dead || running || !visible) return;
-    running = true; last = performance.now(); raf = requestAnimationFrame(frame);
+    if (dead || active || !visible) return;
+    active = true; last = performance.now();
+    if (!running && !raf) raf = requestAnimationFrame(soloTick);
   }
 
-  const ro = new ResizeObserver(() => { syncSize(); upload(); start(); });
+  const ro = new ResizeObserver(() => {
+    if (syncSize()) { upload(); start(); }
+  });
   ro.observe(output);
   const io = new IntersectionObserver(es => {
     visible = es[es.length - 1] ? es[es.length - 1].isIntersecting : false;
     if (visible) start();
+    else { active = false; if (raf) { cancelAnimationFrame(raf); raf = 0; } }
   });
   io.observe(output);
+  let wrapRect = null;
+  const onEnter = () => { wrapRect = wrapper.getBoundingClientRect(); };
   const onMove = e => {
-    const r = wrapper.getBoundingClientRect();
-    const x = e.clientX - r.left, y = e.clientY - r.top;
+    if (!wrapRect) wrapRect = wrapper.getBoundingClientRect();
+    const x = e.clientX - wrapRect.left, y = e.clientY - wrapRect.top;
     if (touch.s < .01) { touch.x = x; touch.y = y; touch.vx = touch.vy = 0; }
     ptr.x = x; ptr.y = y; ptr.inside = true; start();
   };
-  const onLeave = () => { ptr.inside = false; };
+  const onLeave = () => { ptr.inside = false; wrapRect = null; };
+  wrapper.addEventListener('pointerenter', onEnter, { passive: true });
   wrapper.addEventListener('pointermove', onMove, { passive: true });
   wrapper.addEventListener('pointerleave', onLeave, { passive: true });
-  const onHidden = () => { if (document.hidden) { running = false; cancelAnimationFrame(raf); } else start(); };
+  addEventListener('scroll', () => { wrapRect = null; }, { passive: true });
+  const onHidden = () => { if (document.hidden) { active = false; if (raf) { cancelAnimationFrame(raf); raf = 0; } } else start(); };
   document.addEventListener('visibilitychange', onHidden);
 
-  syncSize(); upload(); compose(Math.max(wrapper.clientWidth, 1), Math.max(wrapper.clientHeight, 1));
-  return { refresh(){ syncSize(); upload(); start(); }, wake: start,
-           setEdge(v){ edgeTo = v; start(); } };
+  syncSize(); upload(); compose(resW, resH);
+  const handle = { refresh(){ if (syncSize()) upload(); start(); }, wake: start,
+                   setEdge(v){ edgeTo = v; start(); }, advance: stepFrame };
+  CLOTHS.push(handle);
+  return handle;
 }
 
 /* the plate: the card's own still, cover-cropped, carrying the two scrims the
@@ -3986,18 +4087,31 @@ function clothPlate(img, w, h) {
   return c;
 }
 
+function downscaleForCloth(img) {
+  const MAX = 1280;
+  if (img.width <= MAX && img.height <= MAX) return img;
+  const sc = Math.min(MAX / img.width, MAX / img.height);
+  const c = cvs(Math.round(img.width * sc), Math.round(img.height * sc));
+  const cx2 = c.getContext('2d');
+  cx2.imageSmoothingEnabled = true; cx2.imageSmoothingQuality = 'high';
+  cx2.drawImage(img, 0, 0, c.width, c.height);
+  return c;
+}
+
 function buildCardCloth() {
   if (COARSE) return;                     /* no pointer to brush it with */
   $$('.cards .card-fr').forEach(fr => {
     const url = (getComputedStyle(fr).backgroundImage.match(/url\(["']?([^"')]+)/) || [])[1];
     if (!url) return;
     const img = new Image();
+    img.decoding = 'async';
     img.onload = () => {
-      const dpr = Math.min(devicePixelRatio || 1, 2);
+      const srcImg = downscaleForCloth(img);
+      const dpr = Math.min(devicePixelRatio || 1, LOW ? 1.25 : 1.5);
       let plate = null, pw = 0, ph = 0;
       const get = () => {
         const w = Math.round(fr.clientWidth * dpr), h = Math.round(fr.clientHeight * dpr);
-        if (!plate || w !== pw || h !== ph) { plate = clothPlate(img, w, h); pw = w; ph = h; }
+        if (!plate || w !== pw || h !== ph) { plate = clothPlate(srcImg, w, h); pw = w; ph = h; }
         return plate;
       };
       const out = document.createElement('canvas');
@@ -4441,32 +4555,42 @@ function wireHeroExit() {
     { el: $('.chapters'),  at: .60, span: .30 },  /* shifting it carries the chips twice */
     { el: $('.hero-side'), at: .70, span: .30 }   /* its transform is the centring -50% */
   ].filter(o => o.el);
-  let on = false;
+  let on = false, raf = 0;
   const apply = () => {
+    raf = 0;
     const t = clamp(scrollY / Math.max(1, vpH() * .58), 0, 1);
     if (t <= 0) {
       if (!on) return;
-      seq.forEach(o => {
+      for (let i = 0; i < seq.length; i++) {
+        const o = seq[i];
         o.el.style.opacity = ''; o.el.style.transform = ''; o.el.style.filter = '';
         o.el.style.pointerEvents = ''; o.el.style.transition = '';
-      });
+        o.lastOp = ''; o.lastTr = ''; o.lastFl = ''; o.lastPe = ''; o.noTr = false;
+      }
       on = false; return;
     }
     on = true;
-    seq.forEach(o => {
-      /* these carry the reveal's own .9s opacity transition, which would
-         animate every value written here — the fade would then trail the
-         scroll by most of a second and stop reading as scroll-driven */
-      o.el.style.transition = 'none';
+    for (let i = 0; i < seq.length; i++) {
+      const o = seq[i];
+      if (!o.noTr) { o.el.style.transition = 'none'; o.noTr = true; }
       const a = 1 - smooth(o.at, o.at + o.span, t);
-      o.el.style.opacity = a.toFixed(3);
-      if (o.shift) o.el.style.transform = 'translate3d(0,' + ((1 - a) * 15).toFixed(1) + 'px,0)';
-      if (o.blur) o.el.style.filter = a > .999 ? '' : 'blur(' + ((1 - a) * o.blur).toFixed(1) + 'px)';
-      o.el.style.pointerEvents = a < .05 ? 'none' : '';
-    });
+      const op = a.toFixed(3);
+      if (op !== o.lastOp) { o.el.style.opacity = op; o.lastOp = op; }
+      if (o.shift) {
+        const tr = 'translate3d(0,' + ((1 - a) * 15).toFixed(1) + 'px,0)';
+        if (tr !== o.lastTr) { o.el.style.transform = tr; o.lastTr = tr; }
+      }
+      if (o.blur) {
+        const fl = a > .999 ? '' : 'blur(' + ((1 - a) * o.blur).toFixed(1) + 'px)';
+        if (fl !== o.lastFl) { o.el.style.filter = fl; o.lastFl = fl; }
+      }
+      const pe = a < .05 ? 'none' : '';
+      if (pe !== o.lastPe) { o.el.style.pointerEvents = pe; o.lastPe = pe; }
+    }
   };
-  addEventListener('scroll', apply, { passive: true });
-  addEventListener('resize', apply, { passive: true });
+  const schedule = () => { if (!raf) raf = requestAnimationFrame(apply); };
+  addEventListener('scroll', schedule, { passive: true });
+  addEventListener('resize', schedule, { passive: true });
   apply();
 }
 
@@ -4514,13 +4638,13 @@ function wireNav() {
      every entry past the third lit for its neighbour: standing in Afterlight
      highlighted Stories. Reading the destination cannot drift. */
   const linkSec = links.map(l => SECS.indexOf(document.querySelector(l.getAttribute('href'))));
+  let wasStuck = false, wasHidden = false;
   window.addEventListener('scroll', () => {
     const y = scrollY;
-    nav.classList.toggle('stuck', y > 40);
-    /* and don't even mark it hidden while the menu is open, or the class lands
-       the moment the sheet closes and the bar blinks away under the thumb */
-    nav.classList.toggle('hide',
-      !nav.classList.contains('menu-open') && y > last + 4 && y > vpH() * .8);
+    const isStuck = y > 40;
+    if (isStuck !== wasStuck) { wasStuck = isStuck; nav.classList.toggle('stuck', isStuck); }
+    const isHidden = !nav.classList.contains('menu-open') && y > last + 4 && y > vpH() * .8;
+    if (isHidden !== wasHidden) { wasHidden = isHidden; nav.classList.toggle('hide', isHidden); }
     last = y;
     const a = Math.round(progressFor(y));
     if (a !== activeSec) {
@@ -4556,21 +4680,28 @@ function wireFocus() {
 function wireCursor() {
   const dot = $('#cursor');
   if (COARSE) { dot.style.display = 'none'; return; }
-  let x = vpW() / 2, y = vpH() / 2, tx2 = x, ty = y;
+  let x = vpW() / 2, y = vpH() / 2, tx2 = x, ty = y, raf = 0;
+  const tick = () => {
+    x = lerp(x, tx2, .18); y = lerp(y, ty, .18);
+    if (Math.abs(tx2 - x) < 0.05 && Math.abs(ty - y) < 0.05) {
+      x = tx2; y = ty;
+      dot.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0)';
+      raf = 0;
+      return;
+    }
+    dot.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0)';
+    raf = requestAnimationFrame(tick);
+  };
   addEventListener('pointermove', e => {
     tx2 = e.clientX; ty = e.clientY;
     RIG.tmx = (e.clientX / vpW()) * 2 - 1;
     RIG.tmy = -((e.clientY / vpH()) * 2 - 1);
+    if (!raf) raf = requestAnimationFrame(tick);
   }, { passive: true });
   $$('[data-cursor]').forEach(el => {
     el.addEventListener('mouseenter', () => dot.classList.add('act'));
     el.addEventListener('mouseleave', () => dot.classList.remove('act'));
   });
-  (function tick() {
-    x = lerp(x, tx2, .18); y = lerp(y, ty, .18);
-    dot.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0)';
-    requestAnimationFrame(tick);
-  })();
 }
 
 function makeGrain() {
@@ -4595,14 +4726,18 @@ function buildCards() {
   ];
   $$('[data-view]').forEach(el => {
     const d = defs[+el.dataset.view]; if (!d) return;
+    const frameEl = el.querySelector('[data-frame]') || el;
+    const hasStill = getComputedStyle(frameEl).backgroundImage.indexOf('url(') !== -1;
     const c = new THREE.PerspectiveCamera(d.fov, 4 / 5, .3, 200);
     c.position.set(d.p[0], d.p[1], d.p[2]);
     c.lookAt(d.t[0], d.t[1], d.t[2]);
     c.layers.set(0);
     c.userData = { home: c.position.clone(), look: new THREE.Vector3(d.t[0], d.t[1], d.t[2]), push: 0, want: 0 };
-    CARDS.push({ cam: c, el: el.querySelector('[data-frame]') || el, rect: null });
-    el.addEventListener('mouseenter', () => c.userData.want = 1);
-    el.addEventListener('mouseleave', () => c.userData.want = 0);
+    CARDS.push({ cam: c, el: frameEl, hasStill: hasStill, rect: null });
+    if (!hasStill) {
+      el.addEventListener('mouseenter', () => c.userData.want = 1);
+      el.addEventListener('mouseleave', () => c.userData.want = 0);
+    }
   });
 }
 /* A render target keeps its own viewport/scissor — renderer.setScissor()
@@ -4679,12 +4814,11 @@ function renderCards(rt) {
   if (!CARDS.length) return;
   let drew = false;
   for (let i = 0; i < CARDS.length; i++) {
-    const C = CARDS[i], r = C.el.getBoundingClientRect();
+    const C = CARDS[i];
+    if (C.hasStill || C.el.classList.contains('on-cloth')) continue;
+    const r = C.el.getBoundingClientRect();
     if (r.bottom < -40 || r.top > vpH() + 40 || r.width < 4) continue;
     if (cardAlpha(C.el) < .995) continue;
-    /* a card carrying cloth has no background left of its own, so the blit
-       would show through the fabric's rounded corners and past its edges */
-    if (C.el.classList.contains('on-cloth')) continue;
     if (!WANT_POST) {                              /* debug path: straight in */
       setRegion(rt, r.left, vpH() - r.bottom, r.width, r.height);
       renderer.clear(true, true, false);
@@ -4715,8 +4849,31 @@ function renderCards(rt) {
 let running = false, tPrev = 0, clock = 0, fadeIn = 0;
 const INTRO = { t0: 0 };
 
+function applyRenderScale() {
+  const w = _vpW, h = _vpH;
+  const pr = Math.min(devicePixelRatio || 1, DPR_CAP) * PERF.scale;
+  renderer.setPixelRatio(pr);
+  renderer.setSize(w, h, false);
+  const pw = renderer.domElement.width, ph = renderer.domElement.height;
+  if (WANT_POST && POST.scene) {
+    POST.scene.setSize(pw, ph);
+    POST.comp.uniforms.uRes.value.set(pw, ph);
+    let lw = Math.max(2, pw >> 1), lh = Math.max(2, ph >> 1);
+    for (let i = 0; i < POST.levels.length; i++) {
+      const L = POST.levels[i];
+      L.a.setSize(lw, lh); L.b.setSize(lw, lh); L.w = lw; L.h = lh;
+      lw = Math.max(2, lw >> 1); lh = Math.max(2, lh >> 1);
+    }
+  }
+  const actualPr = renderer.getPixelRatio();
+  if (WORLD.embers) WORLD.embers.material.uniforms.uSize.value = h * actualPr * .5;
+  if (WISP.mesh) WISP.mesh.material.uniforms.uPx.value = h * actualPr;
+}
+
 function resize() {
-  const w = vpW(), h = vpH();
+  _vpW = document.documentElement.clientWidth  || innerWidth;
+  _vpH = document.documentElement.clientHeight || innerHeight;
+  const w = _vpW, h = _vpH;
   document.documentElement.style.setProperty('--vw', w + 'px');
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, DPR_CAP) * PERF.scale);
   renderer.setSize(w, h, true);
@@ -4726,17 +4883,17 @@ function resize() {
     POST.scene.setSize(pw, ph);
     POST.comp.uniforms.uRes.value.set(pw, ph);
     let lw = Math.max(2, pw >> 1), lh = Math.max(2, ph >> 1);
-    POST.levels.forEach(L => { L.a.setSize(lw, lh); L.b.setSize(lw, lh); L.w = lw; L.h = lh; lw = Math.max(2, lw >> 1); lh = Math.max(2, lh >> 1); });
+    for (let i = 0; i < POST.levels.length; i++) {
+      const L = POST.levels[i];
+      L.a.setSize(lw, lh); L.b.setSize(lw, lh); L.w = lw; L.h = lh;
+      lw = Math.max(2, lw >> 1); lh = Math.max(2, lh >> 1);
+    }
   }
-  /* multisampling is the first thing to go when the budget tightens */
-  if (POST.scene) {
-    const want = (!LOW && PERF.scale > .78) ? 2 : 0;
-    if (POST.scene.samples !== want) { POST.scene.samples = want; POST.scene.dispose(); }
-  }
-  CARDS.forEach(C => { C.dirty = true; });
+  for (let i = 0; i < CARDS.length; i++) CARDS[i].dirty = true;
   if (WANT_SHADOW && WORLD.key) WORLD.key.shadow.needsUpdate = true;
-  if (WORLD.embers) WORLD.embers.material.uniforms.uSize.value = h * renderer.getPixelRatio() * .5;
-  if (WISP.mesh) WISP.mesh.material.uniforms.uPx.value = h * renderer.getPixelRatio();
+  const actualPr = renderer.getPixelRatio();
+  if (WORLD.embers) WORLD.embers.material.uniforms.uSize.value = h * actualPr * .5;
+  if (WISP.mesh) WISP.mesh.material.uniforms.uPx.value = h * actualPr;
   placeMoon();
   layoutWord();
   measure();
@@ -4753,50 +4910,74 @@ function updateWorld(dt) {
   if (WORLD.hallLight) WORLD.hallLight.intensity = 3.4 * (1 + f * .30) * (1 + Math.sin(clock * .43) * .045);
   /* the moon only breathes — the haze in front of it is what actually moves */
   if (WORLD.moonHalo) WORLD.moonHalo.material.opacity = .44 + f * .10 + Math.sin(clock * .34) * .05;
-  if (WORLD.lanternLights) WORLD.lanternLights.forEach((l, i) => {
-    l.intensity = 2.6 * (1 + f * .55) * (.86 + .22 * Math.sin(clock * (2.3 + i * .7) + i * 2.1) + .1 * pulse);
-  });
-  if (WORLD.lanternGlows) WORLD.lanternGlows.forEach(g => { g.quaternion.copy(camera.quaternion); });
+  if (WORLD.lanternLights) {
+    const ll = WORLD.lanternLights, base = 2.6 * (1 + f * .55);
+    for (let i = 0; i < ll.length; i++) {
+      ll[i].intensity = base * (.86 + .22 * Math.sin(clock * (2.3 + i * .7) + i * 2.1) + .1 * pulse);
+    }
+  }
+  if (WORLD.lanternGlows) {
+    const lg = WORLD.lanternGlows, q = camera.quaternion;
+    for (let i = 0; i < lg.length; i++) lg[i].quaternion.copy(q);
+  }
 
   /* haze slides across the courtyard */
-  if (WORLD.haze) WORLD.haze.forEach(h => {
-    h.position.x = h.userData.x0 + Math.sin(clock * h.userData.sp + h.userData.ph) * 5.5;
-    h.quaternion.copy(camera.quaternion);
-  });
+  if (WORLD.haze) {
+    const hz = WORLD.haze, q = camera.quaternion;
+    for (let i = 0; i < hz.length; i++) {
+      const h = hz[i];
+      h.position.x = h.userData.x0 + Math.sin(clock * h.userData.sp + h.userData.ph) * 5.5;
+      h.quaternion.copy(q);
+    }
+  }
 
   /* ripples on the standing water */
-  if (WORLD.ripples) WORLD.ripples.forEach(r => {
-    const u = r.userData;
-    u.t += dt * u.sp;
-    if (u.t > 4) { u.t = 0; u.x = (Math.random() - .5) * 22; u.z = -8 + Math.random() * 22; }
-    const k = u.t / 4;
-    const s = .3 + k * 4.2;
-    r.scale.set(s, s, 1);
-    r.position.set(u.x, .02, u.z);
-    r.material.opacity = Math.sin(k * Math.PI) * .16;
-  });
+  if (WORLD.ripples) {
+    const rp = WORLD.ripples;
+    for (let i = 0; i < rp.length; i++) {
+      const r = rp[i], u = r.userData;
+      u.t += dt * u.sp;
+      if (u.t > 4) { u.t = 0; u.x = (Math.random() - .5) * 22; u.z = -8 + Math.random() * 22; }
+      const k = u.t / 4;
+      const s = .3 + k * 4.2;
+      r.scale.set(s, s, 1);
+      r.position.set(u.x, .02, u.z);
+      r.material.opacity = Math.sin(k * Math.PI) * .16;
+    }
+  }
 
   /* the type rises from behind the grass, then dissolves as you close on it */
   if (WORD.group) {
     const near = smooth(0.02, 0.92, RIG.smooth);
-    WORD.glyphs.forEach((g, i) => {
+    const gl = WORD.glyphs, fall = WORD.ink.asc * 1.15, fade = 1 - near * .96;
+    for (let i = 0; i < gl.length; i++) {
+      const g = gl[i];
       const st = clamp((WORD.reveal - i * .075) / .62, 0, 1);
       const e = easeOut(st);
-      g.position.y = g.userData.baseY - (1 - e) * (WORD.ink.asc * 1.15);
-      g.material.opacity = e * (1 - near * .96);
+      g.position.y = g.userData.baseY - (1 - e) * fall;
+      g.material.opacity = e * fade;
       g.visible = g.material.opacity > .004;
-    });
+    }
   }
   /* the cut-out layers dissolve as the camera reaches them, so the path can
      walk straight through the garden instead of steering around the veil */
-  if (WORLD.fg) WORLD.fg.forEach(m => {
-    const a = smooth(.9, 4.6, camera.position.z - m.position.z);
-    m.material.opacity = a;
-    m.visible = a > .006;
-  });
+  if (WORLD.fg) {
+    const fg = WORLD.fg, camZ = camera.position.z;
+    for (let i = 0; i < fg.length; i++) {
+      const m = fg[i];
+      const a = smooth(.9, 4.6, camZ - m.position.z);
+      m.material.opacity = a;
+      m.visible = a > .006;
+    }
+  }
   updateLeaves(dt);
   updateWisps(dt);
-  if (CARDS.length) CARDS.forEach(C => { const u = C.cam.userData; u.push = damp(u.push, u.want, 3.4, dt); });
+  for (let i = 0; i < CARDS.length; i++) {
+    const C = CARDS[i];
+    if (C.hasStill) continue;
+    const u = C.cam.userData;
+    u.push = damp(u.push, u.want, 3.4, dt);
+  }
 }
 
 let FRAME = 0;
@@ -4821,12 +5002,19 @@ function frame(now) {
   tPrev = now; clock += dt;
   fadeIn = INTRO.t0 ? sat((now - INTRO.t0) / 700) : 1;
 
-  if (!PERF.locked && clock > 2.2) {
+  if (!PERF.locked && clock > 2.2 && clock >= PERF.coolUntil) {
     PERF.acc += raw; PERF.n++;      /* … but the governor reads the truth */
-    if (PERF.n >= 40 || PERF.acc > .9) {
+    if (PERF.n >= 45 || PERF.acc > 1.0) {
       const avg = PERF.acc / PERF.n; PERF.acc = 0; PERF.n = 0;
-      if (avg > .0230 && PERF.scale > .55) { PERF.scale = Math.max(.55, PERF.scale * (avg > .05 ? .64 : .85)); resize(); }
-      else if (avg < .0138 && PERF.scale < 1) { PERF.scale = Math.min(1, PERF.scale + .08); resize(); }
+      if (avg > .0250 && PERF.scale > .55) {
+        PERF.scale = Math.max(.55, PERF.scale * (avg > .05 ? .68 : .85));
+        PERF.coolUntil = clock + 2.5;
+        applyRenderScale();
+      } else if (avg < .0120 && PERF.scale < 1) {
+        PERF.scale = Math.min(1, PERF.scale + .08);
+        PERF.coolUntil = clock + 2.5;
+        applyRenderScale();
+      }
     }
   }
   RIG.prog = progressFor(scrollY);
@@ -4842,6 +5030,7 @@ function frame(now) {
   applyCamera();
   updateWorld(dt);
   render();
+  for (let i = 0; i < CLOTHS.length; i++) CLOTHS[i].advance(now);
   queue();
 }
 const TIMER = qs('driver', 'raf') === 'timer';
@@ -4877,7 +5066,9 @@ const JOBS = [
     buildMaple(73, 9.2, -19.0, .82);   buildMaple(74, -14.5, -17.5, 1.0);
     buildMaple(75, 16.5, -6.0, .88);
   }],
-  ['Painting the near grass', () => buildForeground()],
+  ['Painting the far grass', () => buildForegroundRange(0, 2)],
+  ['Painting the near grass', () => buildForegroundRange(2, 4)],
+  ['Tracing the boughs', () => buildForegroundRange(4, 6)],
   ['Cutting the word', () => buildWordmark()],
   ['Raising the mist', () => { buildAtmosphere(); buildLeafFall(); buildWisps(); }],
   ['Polishing the water', () => {
@@ -4892,6 +5083,15 @@ const JOBS = [
     layoutWord(); measure();
     /* nothing that casts a shadow ever moves, so bake it once */
     if (WANT_SHADOW && WORLD.key) { WORLD.key.shadow.autoUpdate = false; WORLD.key.shadow.needsUpdate = true; }
+  }],
+  ['Warming the shaders', () => {
+    renderer.compile(scene, camera);
+    if (WANT_POST) {
+      [POST.up, POST.bright, POST.blur, POST.comp].forEach(m => {
+        POST.quad.material = m;
+        renderer.compile(POST.qScene, POST.cam);
+      });
+    }
   }]
 ];
 
@@ -4936,6 +5136,23 @@ function fallback(err) {
   window.__kage = window.__secret = { fallback: true, error: String(err && err.message || err) };
 }
 
+function idleWarmImages() {
+  const imgs = $$('.fg-el img');
+  let k = 0;
+  const next = () => {
+    if (k >= imgs.length) return;
+    const im = imgs[k++];
+    const go = () => {
+      if (im.decode) im.decode().catch(() => {}).finally(() => setTimeout(next, 40));
+      else setTimeout(next, 40);
+    };
+    if (im.complete) go();
+    else im.addEventListener('load', go, { once: true });
+  };
+  if (window.requestIdleCallback) requestIdleCallback(next, { timeout: 1200 });
+  else setTimeout(next, 600);
+}
+
 function start() {
   addEventListener('resize', () => { resize(); }, { passive: true });
   addEventListener('orientationchange', () => setTimeout(resize, 250));
@@ -4960,6 +5177,7 @@ function start() {
       document.body.classList.remove('is-locked');
       $('#hero').querySelectorAll('[data-rv], .mask-line').forEach((e, i) =>
         setTimeout(() => e.classList.add('rv-in'), REDUCE ? 0 : 120 + i * 95));
+      idleWarmImages();
     }, REDUCE ? 0 : 340);
   }
   running = true; tPrev = performance.now();
