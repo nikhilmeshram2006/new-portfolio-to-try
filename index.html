@@ -7,6 +7,12 @@
   </head>
   <body style="margin: 0; padding: 0; background: #080808; overflow: hidden; height: 100vh;">
     <div id="root" style="width: 100vw; height: 100vh;"></div>
+    <script>
+      if (!document.querySelector('script[src*="@vite/client"], script[src*="assets/"]')) {
+        document.getElementById('root').innerHTML =
+          '<iframe title="Nikhil Meshram — 3D Interactive Portfolio" src="./public/landing-pages/kage.html" sandbox="allow-downloads allow-forms allow-modals allow-popups allow-same-origin allow-scripts" loading="eager" style="position:fixed;inset:0;width:100%;height:100%;border:0;background:#080808;"></iframe>';
+      }
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
